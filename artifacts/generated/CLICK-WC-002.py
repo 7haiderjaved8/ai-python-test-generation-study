@@ -1,0 +1,14 @@
+def test_other_command_invoke(runner):
+    @click.command()
+    @click.pass_context
+    def cli(ctx):
+        return ctx.invoke(other_cmd, arg=42)
+
+    @click.command()
+    @click.argument("arg", type=click.INT)
+    def other_cmd(arg):
+        click.echo(f"Arg: {arg}")
+
+    result = runner.invoke(cli, [])
+    assert not result.exception
+    assert result.output == "Arg: 42\n"
